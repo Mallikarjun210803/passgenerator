@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <h1>Password Generator</h1>
+    <button onclick="handleGeneratePassword()">Generate Password</button>
+    <p id="password-output"></p> <script>
+        function promptYesNo(question) {
+  while (true) {
+    const answer = prompt(question + " (y/n):").toLowerCase();
+    if (answer === 'y' || answer === 'n') {
+      return answer === 'y';
+    } else {
+      alert("Please enter 'y' for yes or 'n' for no.");
+    }
+  }
+}
+
+function getUserPreferences() {
+  const length = parseInt(prompt("Enter the desired length of the password:"));
+  const useUppercase = promptYesNo("Include uppercase letters?");
+  const useLowercase = promptYesNo("Include lowercase letters?");
+  const useDigits = promptYesNo("Include digits?");
+  const usePunctuation = promptYesNo("Include special characters (punctuation)?");
+  return { length, useUppercase, useLowercase, useDigits, usePunctuation };
+}
+
+function generatePassword(options) {
+  const characters = [];
+  if (options.useUppercase) characters.push(...'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  if (options.useLowercase) characters.push(...'abcdefghijklmnopqrstuvwxyz');
+  if (options.useDigits) characters.push(...'0123456789');
+  if (options.usePunctuation) characters.push(...'!@#$%^&*()_+-=[]{};\':"\',.<>/?');
+
+  if (characters.length === 0) {
+    return "No characters selected for password generation!";
+  }
+
+  return Array.from({ length: options.length }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+}
+
+function handleGeneratePassword() {
+  const preferences = getUserPreferences();
+  const password = generatePassword(preferences);
+  console.log("Generated Password:", password);
+
+  // Update the password-output paragraph element with the generated password
+  document.getElementById('password-output').textContent = password;
+}
+    </script>
+</body>
+</html>
